@@ -24,7 +24,7 @@ type UserService interface {
 	Login(email, password string) (string, Core, error)
 	Register(newUser Core) (Core, error)
 	Profile(token interface{}) (Core, error)
-	Update(id uint, updateData Core) (Core, error)
+	Update(token interface{}, updateData Core) (Core, error)
 	// Deactive(id uint) error
 }
 
