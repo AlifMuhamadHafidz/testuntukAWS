@@ -59,3 +59,23 @@ func (uc *userControll) Profile() echo.HandlerFunc {
 		return c.JSON(PrintSuccessReponse(http.StatusOK, "berhasil lihat profil", res))
 	}
 }
+
+func (uc *userControll) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token := c.Get("user")
+		body := UpdateRequest{}
+
+		if err := c.Bind(&body); err != nil {
+			return c.JSON(http.StatusBadRequest, "format inputan salah")
+		}
+
+		res, err := uc.srv.Update(token, *ToCore(body))
+
+		if err != nil {
+			return c.JSON(PrintErrorResponse(err.Error()))
+		}
+
+		return c.JSON(PrintSuccessReponse(http.StatusOK, "berhasil update profil", res))
+
+	}
+}
