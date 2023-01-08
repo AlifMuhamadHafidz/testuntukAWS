@@ -88,6 +88,6 @@ func (uc *userControll) Deactive() echo.HandlerFunc {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
 
-		return c.JSON(PrintSuccessReponse(http.StatusOK, "berhasil hapus profil"))
+		return c.JSON(http.StatusAccepted, "berhasil hapus profil")
 	}
 }
