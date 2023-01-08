@@ -7,6 +7,7 @@ type Core struct {
 	Judul       string `validate:"required"`
 	TahunTerbit int    `validate:"required"`
 	Penulis     string `validate:"required"`
+	UserID      uint
 	Pemilik     string
 }
 
@@ -19,14 +20,14 @@ type BookHandler interface {
 
 type BookService interface {
 	Add(token interface{}, newBook Core) (Core, error)
-	Update(token interface{}, bookID int, updatedData Core) (Core, error)
+	Update(token interface{}, bookID uint, updatedData Core) (Core, error)
 	// Delete(token interface{}, bookID int) error
 	// MyBook(token interface{}) ([]Core, error)
 }
 
 type BookData interface {
 	Add(userID int, newBook Core) (Core, error)
-	Update(userID uint, bookID int, updatedData Core) (Core, error)
+	Update(userID uint, bookID uint, updatedData Core) (Core, error)
 	// Delete(bookID int, userID int) error
 	// MyBook(userID int) ([]Core, error)
 }

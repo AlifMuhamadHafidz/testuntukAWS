@@ -30,7 +30,7 @@ func (bd *bookData) Add(userID int, newBook book.Core) (book.Core, error) {
 
 	return newBook, nil
 }
-func (bd *bookData) Update(userID uint, bookID int, updatedData book.Core) (book.Core, error) {
+func (bd *bookData) Update(userID uint, bookID uint, updatedData book.Core) (book.Core, error) {
 	getID := Books{}
 	err := bd.db.Where("id = ?", bookID).First(&getID).Error
 
