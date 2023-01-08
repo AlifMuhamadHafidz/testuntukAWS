@@ -61,6 +61,21 @@ func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
 	return ToCore(cnv), nil
 }
 
-// func (uq *userQuery) Deactive(id uint) error {
+func (uq *userQuery) Deactive(id uint) error {
+	qry := uq.db.Where("id = ? ", id).Delete(&User{})
+	affRow := qry.RowsAffected
 
-// }
+	if affRow <= 0 {
+		log.Println("no data processed")
+		return errors.New("tidak ada data yang dihapus")
+	}
+
+	err := qry.Error
+
+	if err != nil {
+		log.Println("delete user query error", err.Error())
+		return errors.New("tidak dapat menghapus data")
+	}
+
+	return nil
+}
