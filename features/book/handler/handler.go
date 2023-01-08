@@ -85,6 +85,6 @@ func (bh *bookHandle) Delete() echo.HandlerFunc {
 			return c.JSON(helper.PrintErrorResponse(err.Error()))
 		}
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil delete buku"))
+		return c.JSON(http.StatusAccepted, "berhasil delete buku")
 	}
 }
