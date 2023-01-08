@@ -51,7 +51,7 @@ func PrintErrorResponse(msg string) (int, interface{}) {
 		code = http.StatusInternalServerError
 	} else if strings.Contains(msg, "format") {
 		code = http.StatusBadRequest
-	} else if strings.Contains(msg, "not found") {
+	} else {
 		code = http.StatusNotFound
 	}
 
