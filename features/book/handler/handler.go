@@ -5,6 +5,7 @@ import (
 	"api/helper"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -39,6 +40,28 @@ func (bh *bookHandle) Add() echo.HandlerFunc {
 }
 func (bh *bookHandle) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return c.JSON(http.StatusNoContent, "")
+		token := c.Get("user")
+
+		paramID := c.Param("id")
+
+		bookID, err := strconv.Atoi(paramID)
+
+		if err != nil {
+			log.Println("convert id error", err.Error())
+			return c.JSON(http.StatusBadGateway, "masukan input sesuai pola")
+		}
+
+		body := UpdateBookRequest{}
+		if err := c.Bind(&body); err != nil {
+			return c.JSON(http.StatusBadGateway, "masukan input sesuai pola yang benar")
+		}
+
+		res, err := bh.srv.Update(token, uint(bookID), *ToCore(body))
+
+		if err != nil {
+			return c.JSON(helper.PrintErrorResponse(err.Error()))
+		}
+
+		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil update buku", res))
 	}
 }
