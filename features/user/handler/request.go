@@ -16,14 +16,13 @@ type RegisterRequest struct {
 }
 
 type UpdateRequest struct {
-	Nama     string `json:"nama" form:"nama"`
-	Email    string `json:"email" form:"email"`
-	Alamat   string `json:"alamat" form:"alamat"`
-	HP       string `json:"hp" form:"hp"`
-	Password string `json:"password" form:"password"`
+	Nama   string `json:"nama" form:"nama"`
+	Email  string `json:"email" form:"email"`
+	Alamat string `json:"alamat" form:"alamat"`
+	HP     string `json:"hp" form:"hp"`
 }
 
-func ToCore(data interface{}) *user.Core {
+func ReqToCore(data interface{}) *user.Core {
 	res := user.Core{}
 
 	switch data.(type) {
@@ -44,7 +43,6 @@ func ToCore(data interface{}) *user.Core {
 		res.Nama = cnv.Nama
 		res.Alamat = cnv.Alamat
 		res.HP = cnv.HP
-		res.Password = cnv.Password
 	default:
 		return nil
 	}

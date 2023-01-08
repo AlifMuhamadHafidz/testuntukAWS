@@ -39,7 +39,7 @@ func (uc *userControll) Register() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "format inputan salah")
 		}
 
-		res, err := uc.srv.Register(*ToCore(input))
+		res, err := uc.srv.Register(*ReqToCore(input))
 		if err != nil {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
@@ -69,7 +69,7 @@ func (uc *userControll) Update() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "format inputan salah")
 		}
 
-		res, err := uc.srv.Update(token, *ToCore(body))
+		res, err := uc.srv.Update(token, *ReqToCore(body))
 
 		if err != nil {
 			return c.JSON(PrintErrorResponse(err.Error()))

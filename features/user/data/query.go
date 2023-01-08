@@ -49,9 +49,15 @@ func (uq *userQuery) Profile(id uint) (user.Core, error) {
 	return ToCore(res), nil
 }
 
-func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
+func (uq *userQuery) Update(UserID uint, updateData user.Core) (user.Core, error) {
 	cnv := CoreToData(updateData)
-	qry := uq.db.Model(&User{}).Where("id = ?", updateData.ID).Updates(updateData)
+	qry := uq.db.Model(&User{}).Where("id = ?", UserID).Updates(&cnv)
+
+	affrows := qry.RowsAffected
+	if affrows == 0 {
+		log.Println("no rows affected")
+		return user.Core{}, errors.New("tidak ada data user yang diubah")
+	}
 	err := qry.Error
 
 	if err != nil {
@@ -62,7 +68,7 @@ func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
 }
 
 func (uq *userQuery) Deactive(id uint) error {
-	qry := uq.db.Where("id = ? ", id).Delete(&User{})
+	qry := uq.db.Delete(&User{}, id)
 	affRow := qry.RowsAffected
 
 	if affRow <= 0 {
