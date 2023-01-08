@@ -79,3 +79,15 @@ func (uc *userControll) Update() echo.HandlerFunc {
 
 	}
 }
+
+func (uc *userControll) Deactive() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token := c.Get("user")
+
+		if err := uc.srv.Deactive(token); err != nil {
+			return c.JSON(PrintErrorResponse(err.Error()))
+		}
+
+		return c.JSON(PrintSuccessReponse(http.StatusOK, "berhasil hapus profil"))
+	}
+}
