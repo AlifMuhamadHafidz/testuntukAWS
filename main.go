@@ -42,7 +42,7 @@ func main() {
 
 	// books
 	e.POST("/books", bookHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.PATCH("/books", bookHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.PATCH("/books/:id", bookHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())
