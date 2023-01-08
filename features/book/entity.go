@@ -14,7 +14,7 @@ type Core struct {
 type BookHandler interface {
 	Add() echo.HandlerFunc
 	Update() echo.HandlerFunc
-	// Delete() echo.HandlerFunc
+	Delete() echo.HandlerFunc
 	// MyBook() echo.HandlerFunc
 }
 

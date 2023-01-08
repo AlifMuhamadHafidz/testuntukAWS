@@ -65,3 +65,26 @@ func (bh *bookHandle) Update() echo.HandlerFunc {
 		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil update buku", res))
 	}
 }
+
+func (bh *bookHandle) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token := c.Get("user")
+
+		paramID := c.Param("id")
+
+		bookID, err := strconv.Atoi(paramID)
+
+		if err != nil {
+			log.Println("convert id error", err.Error())
+			return c.JSON(http.StatusBadGateway, "masukan input sesuai pola")
+		}
+
+		err = bh.srv.Delete(token, uint(bookID))
+
+		if err != nil {
+			return c.JSON(helper.PrintErrorResponse(err.Error()))
+		}
+
+		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil delete buku"))
+	}
+}
