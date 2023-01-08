@@ -21,7 +21,7 @@ type BookHandler interface {
 type BookService interface {
 	Add(token interface{}, newBook Core) (Core, error)
 	Update(token interface{}, bookID uint, updatedData Core) (Core, error)
-	// Delete(token interface{}, bookID int) error
+	Delete(token interface{}, bookID uint) error
 	// MyBook(token interface{}) ([]Core, error)
 }
 
