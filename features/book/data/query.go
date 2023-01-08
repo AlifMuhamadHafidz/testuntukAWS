@@ -30,7 +30,20 @@ func (bd *bookData) Add(userID int, newBook book.Core) (book.Core, error) {
 
 	return newBook, nil
 }
-func (bd *bookData) Update(bookID int, updatedData book.Core) (book.Core, error) {
+func (bd *bookData) Update(userID uint, bookID int, updatedData book.Core) (book.Core, error) {
+	getID := Books{}
+	err := bd.db.Where("id = ?", bookID).First(&getID).Error
+
+	if err != nil {
+		log.Println("get user book error", err.Error())
+		return book.Core{}, err
+	}
+
+	if getID.UserID != userID {
+		log.Println("tidak memiliki akses")
+		return book.Core{}, errors.New("tidak memiliki akses")
+	}
+
 	cnv := CoreToData(updatedData)
 	qry := bd.db.Where("id = ?", bookID).Updates(&cnv)
 	if qry.RowsAffected <= 0 {
