@@ -28,6 +28,6 @@ type BookService interface {
 type BookData interface {
 	Add(userID uint, newBook Core) (Core, error)
 	Update(userID uint, bookID uint, updatedData Core) (Core, error)
-	// Delete(bookID int, userID int) error
+	Delete(userID uint, bookID uint) error
 	// MyBook(userID int) ([]Core, error)
 }

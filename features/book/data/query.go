@@ -59,9 +59,32 @@ func (bd *bookData) Update(userID uint, bookID uint, updatedData book.Core) (boo
 	return ToCore(cnv), nil
 }
 
-// func (bd *bookData) Delete(bookID int, userID int) error {
-// 	return nil
-// }
+func (bd *bookData) Delete(userID uint, bookID uint) error {
+	getID := Books{}
+	err := bd.db.Where("id = ? ", bookID).First(&getID).Error
+
+	if err != nil {
+		log.Println("get user book error", err.Error())
+		return errors.New("failed to get user book data")
+	}
+
+	if getID.UserID != userID {
+		log.Println("tidak memiliki akses")
+		return errors.New("tidak memiliki akses")
+	}
+
+	qry := bd.db.Delete(&Books{}, bookID)
+
+	affRows := qry.RowsAffected
+
+	if affRows <= 0 {
+		log.Println("no rows affected")
+		return errors.New("failed to delete user book, data not found")
+	}
+	return nil
+
+}
+
 // func (bd *bookData) MyBook(userID int) ([]book.Core, error) {
 // 	return nil, nil
 // }
