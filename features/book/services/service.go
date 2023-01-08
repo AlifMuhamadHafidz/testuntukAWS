@@ -25,7 +25,7 @@ func New(d book.BookData) book.BookService {
 func (bs *bookSrv) Add(token interface{}, newBook book.Core) (book.Core, error) {
 	userID := helper.ExtractToken(token)
 	if userID <= 0 {
-		return book.Core{}, errors.New("user tidak ditemukan")
+		return book.Core{}, errors.New("user not found")
 	}
 
 	err := bs.vld.Struct(newBook)
@@ -36,16 +36,17 @@ func (bs *bookSrv) Add(token interface{}, newBook book.Core) (book.Core, error) 
 		return book.Core{}, errors.New("input buku tidak sesuai dengan arahan")
 	}
 
-	res, err := bs.data.Add(userID, newBook)
+	res, err := bs.data.Add(uint(userID), newBook)
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
-			msg = "buku tidak ditemukan"
+			msg = "buku not found"
 		} else {
 			msg = "terjadi kesalahan pada server"
 		}
 		return book.Core{}, errors.New(msg)
 	}
+	res.UserID = uint(userID)
 
 	return res, nil
 
