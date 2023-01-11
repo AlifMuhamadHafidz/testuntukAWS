@@ -7,7 +7,6 @@ import (
 	"errors"
 	"log"
 	"strings"
-	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
@@ -46,7 +45,7 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["userID"] = res.ID
-	claims["exp"] = time.Now().Add(time.Hour * 1).Unix() //Token expires after 1 hour
+	// claims["exp"] = time.Now().Add(time.Hour * 1).Unix() //Token expires after 1 hour
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	useToken, _ := token.SignedString([]byte(config.JWT_KEY))
 
@@ -54,12 +53,14 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 
 }
 func (uuc *userUseCase) Register(newUser user.Core) (user.Core, error) {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
+	hashed, err := helper.GeneratePassword(newUser.Password)
+
 	if err != nil {
 		log.Println("bcrypt error ", err.Error())
 		return user.Core{}, errors.New("password process error")
 	}
 	newUser.Password = string(hashed)
+	// log.Panic(string(hashed))
 	res, err := uuc.qry.Register(newUser)
 	if err != nil {
 		msg := ""
