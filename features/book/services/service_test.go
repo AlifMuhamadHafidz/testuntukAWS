@@ -91,4 +91,48 @@ func TestUpdate(t *testing.T) {
 		repo.AssertExpectations(t)
 
 	})
+
+	t.Run("jwt tidak valid", func(t *testing.T) {
+		inputBook := book.Core{Judul: "One Piece", TahunTerbit: 1997, Penulis: "Eichiro Oda"}
+		srv := New(repo)
+
+		_, token := helper.GenerateJWT(0)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Update(pToken, 1, inputBook)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "not found")
+		assert.Equal(t, uint(0), res.ID)
+	})
+
+	t.Run("data tidak ditemukan", func(t *testing.T) {
+		inputBook := book.Core{Judul: "One Piece", TahunTerbit: 1997, Penulis: "Eichiro Oda"}
+		repo.On("Update", uint(2), uint(2), inputBook).Return(book.Core{}, errors.New("data not found")).Once()
+
+		srv := New(repo)
+		_, token := helper.GenerateJWT(2)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Update(pToken, 2, inputBook)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "not found")
+		assert.Equal(t, uint(0), res.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("masalah di server", func(t *testing.T) {
+		inputBook := book.Core{Judul: "One Piece", TahunTerbit: 1997, Penulis: "Eichiro Oda"}
+		repo.On("Update", uint(1), uint(1), inputBook).Return(book.Core{}, errors.New("terdapat masalah pada server")).Once()
+
+		srv := New(repo)
+		_, token := helper.GenerateJWT(1)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Update(pToken, 1, inputBook)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "server")
+		assert.Equal(t, uint(0), res.ID)
+		repo.AssertExpectations(t)
+	})
+
 }
