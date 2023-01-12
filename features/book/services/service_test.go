@@ -69,3 +69,26 @@ func TestAdd(t *testing.T) {
 		assert.ErrorContains(t, err, "not found")
 	})
 }
+
+func TestUpdate(t *testing.T) {
+	repo := mocks.NewBookData(t)
+
+	t.Run("suskes update data", func(t *testing.T) {
+		inputBook := book.Core{Judul: "Naruto", TahunTerbit: 1999, Penulis: "Masashi Kishimoto"}
+		resBook := book.Core{ID: uint(1), Judul: "Naruto", TahunTerbit: 1999, Penulis: "Masashi Kishimoto"}
+		repo.On("Update", uint(1), uint(1), inputBook).Return(resBook, nil).Once()
+
+		srv := New(repo)
+		_, token := helper.GenerateJWT(1)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Update(pToken, uint(1), inputBook)
+		assert.Nil(t, err)
+		assert.Equal(t, resBook.ID, res.ID)
+		assert.Equal(t, inputBook.Judul, res.Judul)
+		assert.Equal(t, inputBook.TahunTerbit, res.TahunTerbit)
+		assert.Equal(t, inputBook.Penulis, res.Penulis)
+		repo.AssertExpectations(t)
+
+	})
+}
