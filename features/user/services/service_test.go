@@ -106,7 +106,7 @@ func TestLogin(t *testing.T) {
 		inputEmail := "alif@be14.com"
 		hashed, _ := helper.GeneratePassword("be1422")
 		resData := user.Core{ID: uint(1), Nama: "alif", Email: "alif@be14.com", HP: "088888", Password: hashed}
-		repo.On("Login", inputEmail).Return(resData, errors.New("masalah pada server"))
+		repo.On("Login", inputEmail).Return(resData, errors.New("terdapat masalah pada server")).Once()
 
 		srv := New(repo)
 		token, res, err := srv.Login(inputEmail, "be1423")
@@ -115,7 +115,6 @@ func TestLogin(t *testing.T) {
 		assert.Empty(t, token)
 		assert.Equal(t, uint(0), res.ID)
 		repo.AssertExpectations(t)
-
 	})
 
 }
