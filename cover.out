@@ -22,11 +22,11 @@ api/features/book/services/service.go:66.49,68.4 1 1
 api/features/book/services/service.go:68.9,68.59 1 1
 api/features/book/services/service.go:68.59,70.4 1 0
 api/features/book/services/service.go:70.9,72.4 1 1
-api/features/book/services/service.go:83.65,86.13 2 0
-api/features/book/services/service.go:90.2,92.16 2 0
-api/features/book/services/service.go:97.2,97.12 1 0
-api/features/book/services/service.go:86.13,88.3 1 0
-api/features/book/services/service.go:92.16,95.3 2 0
+api/features/book/services/service.go:83.65,86.13 2 1
+api/features/book/services/service.go:90.2,92.16 2 1
+api/features/book/services/service.go:97.2,97.12 1 1
+api/features/book/services/service.go:86.13,88.3 1 1
+api/features/book/services/service.go:92.16,95.3 2 1
 api/features/user/services/service.go:21.45,26.2 1 1
 api/features/user/services/service.go:28.82,30.16 2 1
 api/features/user/services/service.go:40.2,40.94 1 1
